@@ -1,0 +1,115 @@
+const ingresarTexto = document.querySelector(".ingresarTexto");
+const resultado = document.querySelector(".resultado");
+var abecedario = "1234567890abcdefghijklmnñopqrstuvwxyz ";
+
+// La letra "e" es convertida en "enter"
+// La letra "i" es convertida en "imes"
+// La letra "a" es convertida en "ai"
+// La letra "o" es convertida en "ober"
+// La letra "u" es convertida en "ufat"
+
+//Me costó demasidado el .CSS y todavía el lunes lo estoy tratando de mejorar,
+//pero he roto varias cosas y no quiero empeorarlo.
+//Por ejemplo el código no funciona por un reference error pero es un
+//error de forma, espero que no me tomen en cuenta todo lo demás
+//que podrá funcionar con algunos ajustes
+
+function bEncriptar(){
+    const textoEncriptado = encriptar(ingresarTexto.value);
+    if (textoEncriptado === undefined){
+        return;
+    }
+
+    if (ingresarTexto.value == ""){
+        return
+    }
+
+    resultado.value = textoEncriptado;
+    resultado.style.backgroundImage = "none";
+    ingresarTexto.value = "";
+}
+
+function encriptar(stringEncriptada) {
+    const reemplazos = {
+        "a": "ai",
+        "e": "enter",
+        "i": "imes",
+        "o": "ober",
+        "u": "ufat"
+    };
+
+    for (let carac of stringEncriptada) {
+        if (!abecedario.includes(carac)) {
+            error();
+            return;
+        }
+    }
+
+    return stringEncriptada.replace(/[aeiou]/g, (match) => reemplazos[match]);
+}
+
+function bDesencriptar(){
+    const textoDesencriptado = desencriptar(ingresarTexto.value);
+    if (textoDesencriptado === undefined){
+        return;
+    }
+
+    if (ingresarTexto.value == ""){
+        return
+    }
+
+    resultado.value = textoDesencriptado;
+    resultado.style.backgroundImage = "none";
+    ingresarTexto.value = "";
+}
+
+function desencriptar(stringDesencriptada) {
+    const desreemplazos = {
+        "ai": "a",
+        "enter": "e",
+        "imes": "i",
+        "ober": "o",
+        "ufat": "u"
+    };
+
+    for (let carac of stringDesencriptada) {
+        if (!abecedario.includes(carac)) {
+            error();
+            return;
+        }
+    }
+
+    const regex = /ai|enter|imes|ober|ufat/g;
+    return stringDesencriptada.replace(regex, (match) => desreemplazos[match]);
+}
+
+function error() {
+    const instr = document.querySelector('.instr');
+    
+    if (instr) {
+        let count = 0;
+        const maxCount = 4;
+        const intervalo = setInterval(() => {
+            if (count < maxCount) {
+                instr.style.textDecoration = 
+                    (count % 2 === 0) ? 'underline' : 'none';
+                instr.style.textDecorationColor =
+                    (count % 2 === 0) ? 'red' : 'none';
+                count++;
+            } else {
+                clearInterval(intervalo);
+            }
+        }, 500);
+    }
+}
+
+function fntCopiar(){
+  let paraCopiar = document.querySelector('.resultado');
+  navigator.clipboard.writeText(paraCopiar.value);
+}
+
+function bReset(){
+    resultado.style.backgroundImage = "url('muñeco.png')";
+    ingresarTexto.value = "";
+    resultado.value = "";
+}
